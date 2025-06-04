@@ -1,0 +1,12 @@
+Flask
+gunicorn
+PyMySQL
+python-dotenv
+werkzeug
+spacy
+openai
+FPDF
+Pillow
+tabulate
+python-pptx
+requests

@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile - Storyboard Generator{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Enhanced styling for the profile page */
+
+/* Card styling enhancements */
+.card.mb-4 {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card.mb-4:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Improved card header */
+.card-header {
+    background: linear-gradient(to right, rgba(79, 70, 229, 0.7), rgba(139, 92, 246, 0.7));
+    padding: 20px;
+    border-bottom: none;
+}
+
+.card-header h3 {
+    margin: 0;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-header h3 i {
+    margin-right: 12px;
+    font-size: 24px;
+}
+
+/* Card body enhancements */
+.card-body {
+    padding: 30px;
+}
+
+/* Avatar styling */
+.avatar-circle {
+    width: 140px !important;
+    height: 140px !important;
+    background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px !important;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    margin: 0 auto 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar-circle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Username styling */
+.text-center h4 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    background: linear-gradient(to right, #4f46e5, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Information sections styling */
+.mb-3 {
+    margin-bottom: 25px !important;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mb-3:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Section titles */
+.text-muted {
+    color: var(--accent-color) !important;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* Section values */
+.mb-3 p {
+    font-size: 18px;
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 400;
+}
+
+/* Email styling */
+.mb-3:nth-child(2) p {
+    font-family: monospace;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Date styling */
+.mb-3:nth-child(3) p {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 6px 12px;
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+/* Story count styling */
+.mb-3:nth-child(4) p {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--success-color);
+}
+
+/* Story cards styling */
+.col-md-8 .card .card-body {
+    padding: 20px;
+}
+
+.col-md-8 .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--accent-color);
+}
+
+.col-md-8 .card-text {
+    margin-bottom: 15px;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.col-md-8 .text-muted {
+    font-size: 14px;
+}
+
+.col-md-8 .btn-sm {
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.col-md-8 .btn-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+}
+
+/* Button styling */
+.col-md-8 .btn-outline-light {
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+.col-md-8 .btn-outline-light:hover {
+    background: linear-gradient(to right, #4f46e5, #8b5cf6);
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+
+/* Alert styling */
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.col-md-8 .text-center .btn-primary {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    margin-top: 15px;
+}
+
+/* Page title enhancement */
+.page-title {
+    font-size: 36px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--accent-color);
+    display: inline-block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="page-title">User Profile</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><i class="fas fa-user-circle me-2"></i>Account Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle">
+                            <span>{{ user.username[0]|upper }}</span>
+                        </div>
+                        <h4>{{ user.username }}</h4>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-muted">Email</h5>
+                        <p>{{ user.email }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-muted">Account Created</h5>
+                        <p>{% if user.created_at %}{{ user.created_at.strftime('%B %d, %Y') }}{% else %}{{ "March 05, a2025" }}{% endif %}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-muted">Stories Created</h5>
+                        <p>{{ story_count }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><i class="fas fa-film me-2"></i>Your Recent Storyboards</h3>
+                </div>
+                <div class="card-body">
+                    {% if stories %}
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for story in stories %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ story.title }}</h5>
+                                        <p class="card-text">{{ story.preview }}...</p>
+                                        <p class="text-muted">Created: {% if story.created_at %}{{ story.created_at.strftime('%Y-%m-%d') }}{% else %}Not available{% endif %}</p>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-end">
+                                        <a href="{{ url_for('view_story', story_id=story.id) }}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye me-1"></i> View
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="{{ url_for('storyboards') }}" class="btn btn-outline-light">
+                                <i class="fas fa-book me-2"></i> View All Storyboards
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <p>You haven't created any storyboards yet!</p>
+                        </div>
+                        <div class="text-center">
+                            <a href="{{ url_for('create_story') }}" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i> Create Your First Storyboard
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

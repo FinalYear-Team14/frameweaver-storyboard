@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}{{ story.title }} - Storyboard Generator{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="page-title">{{ story.title }}</h1>
+                <div>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+                        <i class="fas fa-home me-2"></i> Home
+                    </a>
+                    <a href="{{ url_for('create_story') }}" class="btn btn-primary ms-2">
+                        <i class="fas fa-plus me-2"></i> New Story
+                    </a>
+                     <a href="{{ url_for('edit_story', story_id=story.id) }}" class="btn btn-warning ms-2">
+                        <i class="fas fa-edit me-2"></i> Edit Story
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3><i class="fas fa-film me-2"></i>Storyboard</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Display the storyboard panels in a grid -->
+                    <div class="panel-container mb-4" id="panel-grid">
+                        {% set image_count = story.image_urls|length %}
+                        {% set max_display = 9 %}
+                        {% set limit = image_count if image_count < max_display else max_display %}
+
+                        {% for i in range(limit) %}
+                            <div class="panel">
+                                <img src="{{ url_for('serve_asset', filename=story.image_urls[i]) }}" alt="Panel {{ i+1 }}">
+                                <div class="panel-label">Scene {{ i+1 }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Export Buttons -->
+                    <div class="text-center mb-4">
+                        {% if story.pdf_url %}
+                        <a href="{{ url_for('serve_asset', filename=story.pdf_url) }}" class="btn btn-primary px-4 py-2 me-2" target="_blank">
+                            <i class="fas fa-file-pdf me-2"></i> Open PDF Storyboard
+                        </a>
+                        {% endif %}
+
+                        {% if story.pptx_url %}
+                        <a href="{{ url_for('serve_asset', filename=story.pptx_url) }}" class="btn btn-success px-4 py-2" target="_blank">
+                            <i class="fas fa-file-powerpoint me-2"></i> Open PPT Storyboard
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Story Details -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3><i class="fas fa-book me-2"></i>Story Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="mb-3">Original Outline</h4>
+                            <div class="p-3 bg-dark rounded mb-4">
+                                <p>{{ story.story_outline }}</p>
+                            </div>
+
+                            <h4 class="mb-3">Enhanced Story</h4>
+                            <div class="p-3 bg-dark rounded">
+                                <p>{{ story.enhanced_story }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+       <!-- Audio Files -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h3><i class="fas fa-headphones me-2"></i>Audio Narration</h3>
+                        </div>
+                        <div class="card-body">
+                            {% if story.audio_urls %}
+                                {% for i in range(story.audio_urls|length) %}
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5><i class="fas fa-music me-2"></i>Scene {{ i+1 }}</h5>
+                                    </div>
+                                    <audio controls class="audio-player w-100">
+                                        <source src="{{ url_for('serve_asset', filename=story.audio_urls[i]) }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>No audio files available for this story.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add any special behaviors for the view story page here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Highlight this story in the sidebar
+        const storyItems = document.querySelectorAll('.story-item');
+        storyItems.forEach(item => {
+            if (item.querySelector('a').href.includes('/story/{{ story.id }}')) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
+<!-- Add this section to the view_story.html file under the Story Details section -->
+
+{% if story.character_styles %}
+<div class="col-md-12 mt-4">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3><i class="fas fa-users me-2"></i>Character Styles</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% set character_styles = story.character_styles|tojson|fromjson %}
+                {% for char_name, char_info in character_styles.items() %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">{{ char_name }}</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if char_info.physical_description %}
+                            <div class="mb-3">
+                                <h6 class="text-muted">Physical Description</h6>
+                                <p>{{ char_info.physical_description }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if char_info.key_visual_traits %}
+                            <div>
+                                <h6 class="text-muted">Key Visual Traits</h6>
+                                <p>{{ char_info.key_visual_traits }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

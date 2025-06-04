@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}All Storyboards{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>All Storyboards</h1>
+                <a href="{{ url_for('create_story') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> Create New Storyboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            {% if stories %}
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for story in stories %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ story.title }}</h5>
+                                <p class="card-text">{{ story.preview }}...</p>
+                                <p class="text-muted">Created: {{ story.created_at }}</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <span class="text-muted">ID: {{ story.id }}</span>
+                                <a href="{{ url_for('view_story', story_id=story.id) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye me-1"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <p>No storyboards found. Create your first storyboard!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
